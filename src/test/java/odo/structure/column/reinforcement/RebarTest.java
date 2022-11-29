@@ -13,7 +13,7 @@ class RebarTest {
         Rebar compressionBar = new Rebar(350, 774.2, 63);
 
         assertThat(tensionBar.fy).isEqualTo(350);
-        assertThat(tensionBar.A).isEqualTo(774.2);
+        assertThat(tensionBar.As).isEqualTo(774.2);
         assertThat(tensionBar.d).isEqualTo(437);
         assertThat(compressionBar.d).isEqualTo(63);
     }
