@@ -39,4 +39,10 @@ class ColumnTest {
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void reducedPMCurveTest() {
+        assertThatCode(() -> new Column(section, concrete, rebars).reducedPMCurve())
+                .doesNotThrowAnyException();
+    }
+
 }

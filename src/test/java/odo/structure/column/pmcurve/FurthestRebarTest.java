@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MaximumDistanceTest {
+class FurthestRebarTest {
 
     @Test
     void calculateTest() {
@@ -18,7 +18,7 @@ class MaximumDistanceTest {
                 new Rebar(400, 774.2, 400),
                 new Rebar(400, 774.2, 500)
         );
-        assertThat(MaximumDistance.calculate(rebars)).isEqualTo(500);
+        assertThat(FurthestRebar.calculate(rebars)).isEqualTo(500);
     }
 
 }

@@ -1,9 +1,7 @@
 package odo.structure.column;
 
 import odo.structure.column.material.Concrete;
-import odo.structure.column.pmcurve.AxialStrength;
-import odo.structure.column.pmcurve.FlexuralStrength;
-import odo.structure.column.pmcurve.Point;
+import odo.structure.column.pmcurve.*;
 import odo.structure.column.reinforcement.Rebar;
 import odo.structure.column.section.Rectangle;
 
@@ -29,6 +27,22 @@ public class Column {
             double Mn = FlexuralStrength.calculate(section, concrete, rebars, c);
             double Pn = AxialStrength.calculate(section, concrete, rebars, c);
             points.add(new Point(Mn, Pn));
+        }
+
+        return points;
+    }
+
+    public List<Point> reducedPMCurve() {
+        List<Point> points = new ArrayList<>();
+        Rebar furthestRebar = FurthestRebar.calculate(rebars);
+
+        for (int c = 1; c < section.h; c++) {
+            double furthestRebarStrain = Strain.calculate(furthestRebar.d, c);
+            double phi = Phi.calculate(furthestRebarStrain, furthestRebar.fy);
+
+            double Mn = FlexuralStrength.calculate(section, concrete, rebars, c);
+            double Pn = AxialStrength.calculate(section, concrete, rebars, c);
+            points.add(new Point(phi * Mn, phi * Pn));
         }
 
         return points;
