@@ -18,13 +18,13 @@ public class AxialStrength {
         return Pn;
     }
 
-    private static double concreteForce(Rectangle section, Concrete concrete, double c) {
-        double a = concrete.b1 * c;
+    static double concreteForce(Rectangle section, Concrete concrete, double compressionZoneDepth) {
+        double a = concrete.b1 * compressionZoneDepth;
         return 0.85 * concrete.fck * a * section.b;
     }
 
-    private static double steelForce(Rebar rebar, double c) {
-        return rebar.As * Stress.calculate(rebar, c);
+    static double steelForce(Rebar rebar, double compressionZoneDepth) {
+        return rebar.As * Stress.calculate(rebar, compressionZoneDepth);
     }
 
 }

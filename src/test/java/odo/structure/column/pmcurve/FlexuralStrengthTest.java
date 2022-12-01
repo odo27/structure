@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.withPrecision;
 
-class AxialStrengthTest {
+class FlexuralStrengthTest {
 
     private Rectangle section;
     private Concrete concrete;
@@ -30,21 +30,9 @@ class AxialStrengthTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"460, 2687116", "276, 1435752", "130, 644696.4615"})
+    @CsvSource({"460, 176742268", "276, 291867070.4", "130, 227142033.3"})
     void calculateTest(double c, double expected) {
-        assertThat(AxialStrength.calculate(section, concrete, rebars, c)).isEqualTo(expected, withPrecision(1e-4));
-    }
-
-    @ParameterizedTest
-    @CsvSource({"460, 2392920"})
-    void concreteForceTest(double c, double expected) {
-        assertThat(AxialStrength.concreteForce(section, concrete, c)).isEqualTo(expected);
-    }
-
-    @ParameterizedTest
-    @CsvSource({"0, 460, -23226", "1, 460, -270970"})
-    void steelForceTest(int index, double c, double expected) {
-        assertThat(AxialStrength.steelForce(rebars.get(index), c)).isEqualTo(expected, withPrecision(1e-5));
+        assertThat(FlexuralStrength.calculate(section, concrete, rebars, c)).isEqualTo(expected, withPrecision(1e-1));
     }
 
 }
