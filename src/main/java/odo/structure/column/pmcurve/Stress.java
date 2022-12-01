@@ -5,19 +5,16 @@ import odo.structure.column.reinforcement.Rebar;
 
 public class Stress {
 
-    private static double c;
-
     public static double calculate(Rebar rebar, double compressiveZoneDepth) {
-        c = compressiveZoneDepth;
-        double fs = Rebar.Es * strain(rebar.d);
+        double fs = Rebar.Es * strain(rebar.d, compressiveZoneDepth);
         return rebar.restrictStress(fs);
     }
 
-    private static double strain(double d) {
-        return curvature() * (d - c);
+    private static double strain(double d, double c) {
+        return curvature(c) * (d - c);
     }
 
-    private static double curvature() {
+    private static double curvature(double c) {
         return Concrete.ecu / c;
     }
 
