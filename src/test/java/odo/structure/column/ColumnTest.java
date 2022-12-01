@@ -33,4 +33,10 @@ class ColumnTest {
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void PMCurveTest() {
+        assertThatCode(() -> new Column(section, concrete, rebars).PMCurve())
+                .doesNotThrowAnyException();
+    }
+
 }
