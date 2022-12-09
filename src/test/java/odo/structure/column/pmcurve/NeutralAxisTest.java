@@ -1,10 +1,11 @@
 package odo.structure.column.pmcurve;
 
+import odo.structure.column.section.Rectangle;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.withPrecision;
+import static org.assertj.core.api.Assertions.*;
 
 class NeutralAxisTest {
 
@@ -16,4 +17,13 @@ class NeutralAxisTest {
         neutralAxis = new NeutralAxis(c, theta);
         assertThat(neutralAxis.distanceOfTwoCrossingPoint()).isEqualTo(expected, withPrecision(1e-5));
     }
+
+    @Test
+    void setSectionTest() {
+        neutralAxis = new NeutralAxis(30, 45);
+        Rectangle section = new Rectangle(300, 500);
+        assertThatCode(() -> neutralAxis.setSection(section))
+                .doesNotThrowAnyException();
+    }
+
 }
