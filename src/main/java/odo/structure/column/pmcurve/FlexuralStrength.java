@@ -15,7 +15,8 @@ public class FlexuralStrength {
         Mn += AxialStrength.concreteForce(section, concrete, compressionZoneDepth) * (compressionZoneDepth - a / 2);
 
         for (Rebar rebar : rebars) {
-            Mn += AxialStrength.steelForce(rebar, compressionZoneDepth) * (rebar.d - compressionZoneDepth);
+            double d = section.h / 2 - rebar.y;
+            Mn += AxialStrength.steelForce(section, rebar, compressionZoneDepth) * (d - compressionZoneDepth);
         }
 
         return Mn;

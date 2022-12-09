@@ -35,9 +35,10 @@ public class Column {
     public List<Point> reducedPMCurve() {
         List<Point> points = new ArrayList<>();
         Rebar furthestRebar = FurthestRebar.calculate(rebars);
+        double distanceFromTopOfFurthestRebar = section.h / 2 - furthestRebar.y;
 
         for (int c = 1; c < section.h; c++) {
-            double furthestRebarStrain = Strain.calculate(furthestRebar.d, c);
+            double furthestRebarStrain = Strain.calculate(distanceFromTopOfFurthestRebar, c);
             double phi = Phi.calculate(furthestRebarStrain, furthestRebar.fy);
 
             double Mn = FlexuralStrength.calculate(section, concrete, rebars, c);

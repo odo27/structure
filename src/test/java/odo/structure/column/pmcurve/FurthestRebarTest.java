@@ -12,13 +12,14 @@ class FurthestRebarTest {
     @Test
     void calculateTest() {
         List<Rebar> rebars = List.of(
-                new Rebar(400, 774.2, 100),
-                new Rebar(400, 774.2, 200),
-                new Rebar(400, 774.2, 300),
-                new Rebar(400, 774.2, 400),
-                new Rebar(400, 774.2, 500)
+                new Rebar(400, 774.2, 100,300),
+                new Rebar(400, 774.2, 100, 200),
+                new Rebar(400, 774.2, 100, 100),
+                new Rebar(400, 774.2, 100, 0),
+                new Rebar(400, 774.2, 100, -100)
         );
-        assertThat(FurthestRebar.calculate(rebars)).isEqualTo(500);
+        Rebar furthestRebar = FurthestRebar.calculate(rebars);
+        assertThat(furthestRebar.y).isEqualTo(-100);
     }
 
 }

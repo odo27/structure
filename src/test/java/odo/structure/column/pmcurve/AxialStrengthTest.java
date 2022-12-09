@@ -14,6 +14,11 @@ import static org.assertj.core.api.Assertions.withPrecision;
 
 class AxialStrengthTest {
 
+    private static final double fy = 350;
+    private static final double As = 387.1;
+    private static final double x = 87;
+    private static final double y = 187;
+
     private Rectangle section;
     private Concrete concrete;
     private List<Rebar> rebars;
@@ -23,10 +28,12 @@ class AxialStrengthTest {
         section = new Rectangle(300, 500);
         concrete = new Concrete(24);
 
-        Rebar tensionBar = new Rebar(350, 774.2, 437);
-        Rebar compressionBar = new Rebar(350, 774.2, 63);
+        Rebar leftTensionBar = new Rebar(fy, As, -x, -y);
+        Rebar rightTensionBar = new Rebar(fy, As, x, -y);
+        Rebar leftCompressionBar = new Rebar(fy, As, -x, y);
+        Rebar rightCompressionBar = new Rebar(fy, As, x, y);
 
-        rebars = List.of(tensionBar, compressionBar);
+        rebars = List.of(leftTensionBar, rightTensionBar, leftCompressionBar, rightCompressionBar);
     }
 
     @ParameterizedTest
@@ -42,9 +49,9 @@ class AxialStrengthTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"0, 460, -23226", "1, 460, -270970"})
+    @CsvSource({"0, 460, -11613", "1, 460, -11613", "2, 460, -135485", "3, 460, -135485"})
     void steelForceTest(int index, double c, double expected) {
-        assertThat(AxialStrength.steelForce(rebars.get(index), c)).isEqualTo(expected, withPrecision(1e-5));
+        assertThat(AxialStrength.steelForce(section, rebars.get(index), c)).isEqualTo(expected, withPrecision(1e-5));
     }
 
 }

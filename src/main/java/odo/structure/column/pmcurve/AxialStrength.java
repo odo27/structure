@@ -12,7 +12,7 @@ public class AxialStrength {
         double Pn = concreteForce(section, concrete, compressionZoneDepth);
 
         for (Rebar rebar : rebars) {
-            Pn -= steelForce(rebar, compressionZoneDepth);
+            Pn -= steelForce(section, rebar, compressionZoneDepth);
         }
 
         return Pn;
@@ -23,8 +23,8 @@ public class AxialStrength {
         return 0.85 * concrete.fck * a * section.b;
     }
 
-    static double steelForce(Rebar rebar, double compressionZoneDepth) {
-        return rebar.As * Stress.calculate(rebar, compressionZoneDepth);
+    static double steelForce(Rectangle section, Rebar rebar, double compressionZoneDepth) {
+        return rebar.As * Stress.calculate(section, rebar, compressionZoneDepth);
     }
 
 }

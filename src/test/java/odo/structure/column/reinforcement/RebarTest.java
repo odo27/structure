@@ -1,20 +1,24 @@
 package odo.structure.column.reinforcement;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class RebarTest {
 
-    @Test
-    void constructorTest() {
-        Rebar tensionBar = new Rebar(350, 774.2, 437);
-        Rebar compressionBar = new Rebar(350, 774.2, 63);
+    private static final double fy = 350;
+    private static final double As = 387.1;
 
-        assertThat(tensionBar.fy).isEqualTo(350);
-        assertThat(tensionBar.As).isEqualTo(774.2);
-        assertThat(tensionBar.d).isEqualTo(437);
-        assertThat(compressionBar.d).isEqualTo(63);
+    @ParameterizedTest
+    @CsvSource({"-87, 187", "87, 187", "-87, -187", "87, -187"})
+    void constructorTest(double x, double y) {
+        Rebar rebar = new Rebar(fy, As, x, y);
+        assertThat(rebar.fy).isEqualTo(fy);
+        assertThat(rebar.As).isEqualTo(As);
+        assertThat(rebar.x).isEqualTo(x);
+        assertThat(rebar.y).isEqualTo(y);
     }
 
 }

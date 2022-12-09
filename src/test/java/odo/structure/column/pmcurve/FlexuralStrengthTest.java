@@ -14,6 +14,11 @@ import static org.assertj.core.api.Assertions.withPrecision;
 
 class FlexuralStrengthTest {
 
+    private static final double fy = 350;
+    private static final double As = 387.1;
+    private static final double x = 87;
+    private static final double y = 187;
+
     private Rectangle section;
     private Concrete concrete;
     private List<Rebar> rebars;
@@ -23,10 +28,12 @@ class FlexuralStrengthTest {
         section = new Rectangle(300, 500);
         concrete = new Concrete(24);
 
-        Rebar tensionBar = new Rebar(350, 774.2, 437);
-        Rebar compressionBar = new Rebar(350, 774.2, 63);
+        Rebar leftTensionBar = new Rebar(fy, As, -x, y);
+        Rebar rightTensionBar = new Rebar(fy, As, x, y);
+        Rebar leftCompressionBar = new Rebar(fy, As, -x, -y);
+        Rebar rightCompressionBar = new Rebar(fy, As, x, -y);
 
-        rebars = List.of(tensionBar, compressionBar);
+        rebars = List.of(leftTensionBar, rightTensionBar, leftCompressionBar, rightCompressionBar);
     }
 
     @ParameterizedTest

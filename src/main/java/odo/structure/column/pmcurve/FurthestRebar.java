@@ -10,7 +10,7 @@ public class FurthestRebar {
         Rebar furthestRebar = rebars.get(0);
 
         for (Rebar rebar : rebars) {
-            if (rebar.d > furthestRebar.d) {
+            if (rebar.y < furthestRebar.y) {
                 furthestRebar = rebar;
             }
         }
