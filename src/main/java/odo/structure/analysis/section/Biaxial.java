@@ -26,17 +26,23 @@ public class Biaxial {
             NeutralAxis neutralAxis = new NeutralAxis(c, theta, column.getSection());
 
             double Pn = axialStrength(neutralAxis, c, theta);
+            Point Mn = flexuralStrength(neutralAxis, c, theta);
+            double Mnx = Mn.x;
+            double Mny = Mn.y;
+
+            Point3D point3D = new Point3D(Pn, Mnx, Mny);
+            points3D.add(point3D);
         }
 
-        return null;
+        return points3D;
     }
 
     private double furthestCompressionZoneDepth(double theta) {
         NeutralAxis beginLine = new NeutralAxis(0, theta, column.getSection());
 
         List<Integer> pair = Quadrant.getPair(theta);
-        double xOfEndPoint = -pair.get(0) * column.getSection().b;
-        double yOfEndPoint = -pair.get(1) * column.getSection().h;
+        double xOfEndPoint = -pair.get(0) * column.getSection().b / 2;
+        double yOfEndPoint = -pair.get(1) * column.getSection().h / 2;
 
         return beginLine.distanceToPoint(xOfEndPoint, yOfEndPoint);
     }
@@ -49,6 +55,22 @@ public class Biaxial {
         }
 
         return Pn;
+    }
+
+    private Point flexuralStrength(NeutralAxis neutralAxis, double c, double theta) {
+        double Cc = ConcreteForce.calculate(column.getConcrete(), column.getSection(), c, theta, n);
+        Point centroid = ConcreteForce.centroid(column.getSection(), c, theta, n);
+
+        double Mnx = Cc * centroid.y;
+        double Mny = Cc * centroid.x;
+
+        for (Rebar rebar : column.getRebars()) {
+            double steelForce = steelForce(rebar, neutralAxis, c, theta);
+            Mnx += steelForce * Math.abs(rebar.y);
+            Mny += steelForce * Math.abs(rebar.x);
+        }
+
+        return new Point(Mnx, Mny);
     }
 
     private double steelForce(Rebar rebar, NeutralAxis neutralAxis, double c, double theta) {
@@ -74,8 +96,8 @@ public class Biaxial {
 
     private boolean isInCompressionZone(Rebar rebar, NeutralAxis neutralAxis, double theta) {
         List<Integer> pair = Quadrant.getPair(theta);
-        double xOfBeginPoint = pair.get(0) * column.getSection().b;
-        double yOfBeginPoint = pair.get(1) * column.getSection().h;
+        double xOfBeginPoint = pair.get(0) * column.getSection().b / 2;
+        double yOfBeginPoint = pair.get(1) * column.getSection().h / 2;
 
         boolean signOfCompression = neutralAxis.isNegativeValue(xOfBeginPoint, yOfBeginPoint);
         boolean signOfSteel = neutralAxis.isNegativeValue(rebar.x, rebar.y);
