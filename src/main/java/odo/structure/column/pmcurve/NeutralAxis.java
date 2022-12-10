@@ -26,7 +26,7 @@ public class NeutralAxis {
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
     }
 
-    private List<Point> solve() {
+    public List<Point> solve() {
         List<Point> crossingPoints = new ArrayList<>();
 
         double maximumX = section.b / 2;

@@ -25,4 +25,13 @@ class ConcreteForceTest {
         assertThat(ConcreteForce.calculate(concrete, section, c, theta, n)).isEqualTo(expected, withPrecision(1e-5));
     }
 
+    @ParameterizedTest
+    @CsvSource({"300, 300, 212.13203, 45, 1e7, 50, -50", "300, 259.80762, 129.90381, 60, 1e7, 100, -43.30127"})
+    void centroidTest(double b, double h, double c, double theta, double n, double expectedX, double expectedY) {
+        Rectangle section = new Rectangle(b, h);
+        Point centroid = ConcreteForce.centroid(section, c, theta, n);
+        assertThat(centroid.x).isEqualTo(expectedX, withPrecision(1e-5));
+        assertThat(centroid.y).isEqualTo(expectedY, withPrecision(1e-5));
+    }
+
 }
