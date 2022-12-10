@@ -12,4 +12,12 @@ public class LinearEquation {
         c = constant;
     }
 
+    public double solveX(double y) {
+        return -(cy * y + c) / cx;
+    }
+
+    public double solveY(double x) {
+        return -(cx * x + c) / cy;
+    }
+
 }

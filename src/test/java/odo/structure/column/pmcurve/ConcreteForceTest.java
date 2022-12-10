@@ -1,6 +1,7 @@
 package odo.structure.column.pmcurve;
 
 import odo.structure.column.material.Concrete;
+import odo.structure.column.section.Rectangle;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,9 +19,10 @@ class ConcreteForceTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"30, 45, 3, 13200", "25, 30, 5, 12470.76581"})
+    @CsvSource({"30, 45, 3, 12000", "25, 30, 5, 10392.30485"})
     void calculateTest(double c, double theta, double n, double expected) {
-        assertThat(ConcreteForce.calculate(concrete, c, theta, n)).isEqualTo(expected, withPrecision(1e-5));
+        Rectangle section = new Rectangle(400, 400);
+        assertThat(ConcreteForce.calculate(concrete, section, c, theta, n)).isEqualTo(expected, withPrecision(1e-5));
     }
 
 }

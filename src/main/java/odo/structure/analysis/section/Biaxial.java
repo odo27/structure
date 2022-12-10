@@ -23,8 +23,7 @@ public class Biaxial {
         double furthestCompressionZoneDepth = furthestCompressionZoneDepth(theta);
 
         for (int c = 1; c < furthestCompressionZoneDepth; c++) {
-            NeutralAxis neutralAxis = new NeutralAxis(c, theta);
-            neutralAxis.setSection(column.getSection());
+            NeutralAxis neutralAxis = new NeutralAxis(c, theta, column.getSection());
 
             double Pn = axialStrength(neutralAxis, c, theta);
         }
@@ -33,7 +32,7 @@ public class Biaxial {
     }
 
     private double furthestCompressionZoneDepth(double theta) {
-        NeutralAxis beginLine = new NeutralAxis(0, theta);
+        NeutralAxis beginLine = new NeutralAxis(0, theta, column.getSection());
 
         List<Integer> pair = Quadrant.getPair(theta);
         double xOfEndPoint = -pair.get(0) * column.getSection().b;
@@ -43,7 +42,7 @@ public class Biaxial {
     }
 
     private double axialStrength(NeutralAxis neutralAxis, double c, double theta) {
-        double Pn = ConcreteForce.calculate(column.getConcrete(), c, theta, n);
+        double Pn = ConcreteForce.calculate(column.getConcrete(), column.getSection(), c, theta, n);
 
         for (Rebar rebar : column.getRebars()) {
             Pn += steelForce(rebar, neutralAxis, c, theta);
