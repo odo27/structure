@@ -20,8 +20,9 @@ public class Biaxial {
 
     public List<Point3D> PMCurve(double theta) {
         List<Point3D> points3D = new ArrayList<>();
+        double furthestCompressionZoneDepth = furthestCompressionZoneDepth(theta);
 
-        for (int c = 1; c < column.getSection().h; c++) {
+        for (int c = 1; c < furthestCompressionZoneDepth; c++) {
             NeutralAxis neutralAxis = new NeutralAxis(c, theta);
             neutralAxis.setSection(column.getSection());
 
@@ -29,6 +30,16 @@ public class Biaxial {
         }
 
         return null;
+    }
+
+    private double furthestCompressionZoneDepth(double theta) {
+        NeutralAxis beginLine = new NeutralAxis(0, theta);
+
+        List<Integer> pair = Quadrant.getPair(theta);
+        double xOfEndPoint = -pair.get(0) * column.getSection().b;
+        double yOfEndPoint = -pair.get(1) * column.getSection().h;
+
+        return beginLine.distanceToPoint(xOfEndPoint, yOfEndPoint);
     }
 
     private double axialStrength(NeutralAxis neutralAxis, double c, double theta) {
@@ -64,10 +75,10 @@ public class Biaxial {
 
     private boolean isInCompressionZone(Rebar rebar, NeutralAxis neutralAxis, double theta) {
         List<Integer> pair = Quadrant.getPair(theta);
-        double xOfStartingPoint = pair.get(0) * column.getSection().b;
-        double yOfStartingPoint = pair.get(1) * column.getSection().h;
+        double xOfBeginPoint = pair.get(0) * column.getSection().b;
+        double yOfBeginPoint = pair.get(1) * column.getSection().h;
 
-        boolean signOfCompression = neutralAxis.isNegativeValue(xOfStartingPoint, yOfStartingPoint);
+        boolean signOfCompression = neutralAxis.isNegativeValue(xOfBeginPoint, yOfBeginPoint);
         boolean signOfSteel = neutralAxis.isNegativeValue(rebar.x, rebar.y);
 
         return signOfCompression == signOfSteel;
