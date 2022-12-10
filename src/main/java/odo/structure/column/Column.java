@@ -4,6 +4,7 @@ import odo.structure.column.material.Concrete;
 import odo.structure.column.pmcurve.*;
 import odo.structure.column.reinforcement.Rebar;
 import odo.structure.column.section.Rectangle;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,18 @@ public class Column {
         this.section = section;
         this.concrete = concrete;
         this.rebars = rebars;
+    }
+
+    public Rectangle getSection() {
+        return section;
+    }
+
+    public Concrete getConcrete() {
+        return concrete;
+    }
+
+    public List<Rebar> getRebars() {
+        return rebars;
     }
 
     public List<Point> PMCurve() {

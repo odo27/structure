@@ -2,12 +2,12 @@ package odo.structure.column.pmcurve;
 
 public class Point {
 
-    public final double Mn;
-    public final double Pn;
+    public final double x;
+    public final double y;
 
-    public Point(double Mn, double Pn) {
-        this.Mn = Mn;
-        this.Pn = Pn;
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
 }
