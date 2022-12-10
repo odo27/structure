@@ -27,6 +27,15 @@ class NeutralAxisTest {
         assertThat(neutralAxis.distanceToPoint(x, y)).isEqualTo(expected, withPrecision(1e-5));
     }
 
+    @ParameterizedTest
+    @CsvSource({"-150, -100, true", "200, -200, false"})
+    void isNegativeValueTest(double x, double y, boolean expected) {
+        neutralAxis = new NeutralAxis(100, 45);
+        Rectangle section = new Rectangle(400, 400);
+        neutralAxis.setSection(section);
+        assertThat(neutralAxis.isNegativeValue(x, y)).isEqualTo(expected);
+    }
+
     @Test
     void setSectionTest() {
         neutralAxis = new NeutralAxis(30, 45);

@@ -29,6 +29,11 @@ public class NeutralAxis {
         return numerator / denominator;
     }
 
+    public boolean isNegativeValue(double x, double y) {
+        double value = linearEquation.cx * x + linearEquation.cy * y + linearEquation.c;
+        return value < 0;
+    }
+
     public void setSection(Rectangle section) {
         this.section = section;
         setLinearEquation();
