@@ -18,6 +18,15 @@ class NeutralAxisTest {
         assertThat(neutralAxis.distanceOfTwoCrossingPoint()).isEqualTo(expected, withPrecision(1e-5));
     }
 
+    @ParameterizedTest
+    @CsvSource({"30, 50, 266.98484", "-130, 200, 486.18795", "148, -248, 27.17157"})
+    void distanceToPointTest(double x, double y, double expected) {
+        neutralAxis = new NeutralAxis(30, 45);
+        Rectangle section = new Rectangle(300, 500);
+        neutralAxis.setSection(section);
+        assertThat(neutralAxis.distanceToPoint(x, y)).isEqualTo(expected, withPrecision(1e-5));
+    }
+
     @Test
     void setSectionTest() {
         neutralAxis = new NeutralAxis(30, 45);

@@ -22,6 +22,13 @@ public class NeutralAxis {
         return c * (Math.tan(thetaToRadians) + 1 / Math.tan(thetaToRadians));
     }
 
+    public double distanceToPoint(double x, double y) {
+        double numerator = Math.abs(linearEquation.cx * x + linearEquation.cy * y + linearEquation.c);
+        double denominator = Math.sqrt(Math.pow(linearEquation.cx, 2) + Math.pow(linearEquation.cy, 2));
+
+        return numerator / denominator;
+    }
+
     public void setSection(Rectangle section) {
         this.section = section;
         setLinearEquation();
