@@ -58,17 +58,22 @@ public class BiAxial {
     }
 
     private Point flexuralStrength(NeutralAxis neutralAxis, double c, double theta) {
+        NeutralAxis beginLine = new NeutralAxis(0, theta, column.getSection());
+        double distanceToCentralPointFromBeginLine = beginLine.distanceToPoint(0, 0);
+        double Mn = axialStrength(neutralAxis, c, theta) * (distanceToCentralPointFromBeginLine - c);
+
         double Cc = ConcreteForce.calculate(column.getConcrete(), column.getSection(), c, theta, n);
         Point centroid = ConcreteForce.centroid(column.getSection(), c, theta, n);
-
-        double Mnx = Cc * centroid.y;
-        double Mny = Cc * centroid.x;
+        Mn += Cc * neutralAxis.distanceToPoint(centroid.x, centroid.y);
 
         for (Rebar rebar : column.getRebars()) {
             double steelForce = steelForce(rebar, neutralAxis, c, theta);
-            Mnx += steelForce * Math.abs(rebar.y);
-            Mny += steelForce * Math.abs(rebar.x);
+            Mn += Math.abs(steelForce) * neutralAxis.distanceToPoint(rebar.x, rebar.y);
         }
+
+        double thetaToRadians = Math.toRadians(theta);
+        double Mnx = Math.cos(thetaToRadians) * Mn;
+        double Mny = Math.sin(thetaToRadians) * Mn;
 
         return new Point(Mnx, Mny);
     }
