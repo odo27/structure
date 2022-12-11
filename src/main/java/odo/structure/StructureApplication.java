@@ -5,6 +5,7 @@ import odo.structure.column.Column;
 import odo.structure.column.material.Concrete;
 import odo.structure.column.pmcurve.Point3D;
 import odo.structure.column.pmcurve.PureStrength;
+import odo.structure.column.pmcurve.Quadrant;
 import odo.structure.column.reinforcement.Rebar;
 import odo.structure.column.section.Rectangle;
 import odo.structure.view.WriteCSV;
@@ -25,18 +26,28 @@ public class StructureApplication {
 				new Rebar(400, 506, -150, 150),
 				new Rebar(400, 506, 150, -150)
 		);
-		Column column = new Column(section, concrete, rebars);
-
-		BiAxial biAxial = new BiAxial(column);
-		List<List<Point3D>> analysisResult = new ArrayList<>();
-
-		List<Point3D> points3D = biAxial.PMCurve(59.71204);
 
 		double pureCompression = PureStrength.compression(section, concrete, rebars);
 		double pureTension = PureStrength.tension(rebars);
-		points3D.add(new Point3D(pureCompression, 0, 0));
-		points3D.add(new Point3D(pureTension, 0, 0));
 
-		WriteCSV.writeBiAxialAnalysisResult(points3D);
+		Column column = new Column(section, concrete, rebars);
+		BiAxial biAxial = new BiAxial(column);
+
+		List<List<Point3D>> analysisResult = new ArrayList<>();
+		for (int theta = 1; theta < 360; theta++) {
+			try {
+				Quadrant.validateTheta(theta);
+				System.out.println(theta);
+				List<Point3D> points3D = biAxial.PMCurve(theta);
+
+				points3D.add(new Point3D(pureCompression, 0, 0));
+				points3D.add(new Point3D(pureTension, 0, 0));
+
+				analysisResult.add(points3D);
+			} catch (IllegalArgumentException ignored) {
+			}
+		}
+
+		WriteCSV.writeBiAxialAnalysisResult(analysisResult);
 	}
 }

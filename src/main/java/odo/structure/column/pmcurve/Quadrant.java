@@ -34,7 +34,7 @@ public class Quadrant {
         return PAIRS.get(2);
     }
 
-    private static void validateTheta(double theta) {
+    public static void validateTheta(double theta) {
         if (theta == FIRST || theta == SECOND || theta == THIRD) {
             throw new IllegalArgumentException();
         }
