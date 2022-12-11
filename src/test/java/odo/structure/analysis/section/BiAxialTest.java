@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 
-class BiaxialTest {
+class BiAxialTest {
 
     private Column column;
 
@@ -28,7 +28,7 @@ class BiaxialTest {
 
     @Test
     void PMCurveTest() {
-        assertThatCode(() -> new Biaxial(column).PMCurve(59.71204))
+        assertThatCode(() -> new BiAxial(column).PMCurve(59.71204))
                 .doesNotThrowAnyException();
     }
 

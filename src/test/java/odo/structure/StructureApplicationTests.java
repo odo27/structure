@@ -1,13 +1,15 @@
 package odo.structure;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThatCode;
+
 class StructureApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void mainTest() {
+		assertThatCode(() -> StructureApplication.main(null))
+				.doesNotThrowAnyException();
 	}
 
 }

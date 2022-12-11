@@ -9,12 +9,12 @@ import odo.structure.column.reinforcement.Rebar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Biaxial {
+public class BiAxial {
 
     private static final int n = 10000;
     private final Column column;
 
-    public Biaxial(Column column) {
+    public BiAxial(Column column) {
         this.column = column;
     }
 
