@@ -37,6 +37,39 @@ public class BiAxial {
         return points3D;
     }
 
+    public List<Point3D> reducedPMCurve(double theta) {
+        List<Point3D> points3D = new ArrayList<>();
+        double furthestCompressionZoneDepth = furthestCompressionZoneDepth(theta);
+
+        for (int c = 1; c < furthestCompressionZoneDepth; c++) {
+            NeutralAxis neutralAxis = new NeutralAxis(c, theta, column.getSection());
+
+            Rebar furthestRebar = neutralAxis.furthestRebar(column.getRebars());
+            double phi = phi(neutralAxis, furthestRebar, c);
+
+            double Pn = phi * axialStrength(neutralAxis, c, theta);
+            Point Mn = flexuralStrength(neutralAxis, c, theta);
+            double Mnx = phi * Mn.x;
+            double Mny = phi * Mn.y;
+
+            Point3D point3D = new Point3D(Pn, Mnx, Mny);
+            points3D.add(point3D);
+        }
+
+        return points3D;
+    }
+
+    private double phi(NeutralAxis neutralAxis, Rebar furthestRebar, double c) {
+        if (furthestRebar == null) {
+            return Phi.COMPRESSION_DOMINANT_SECTION;
+        }
+
+        double distanceToFurthestRebar = neutralAxis.distanceToPoint(furthestRebar.x, furthestRebar.y);
+        double strainOfFurthestRebar = Curvature.calculate(c) * distanceToFurthestRebar;
+
+        return Phi.calculate(strainOfFurthestRebar, furthestRebar.fy);
+    }
+
     private double furthestCompressionZoneDepth(double theta) {
         NeutralAxis beginLine = new NeutralAxis(0, theta, column.getSection());
 

@@ -1,5 +1,6 @@
 package odo.structure.column.pmcurve;
 
+import odo.structure.column.reinforcement.Rebar;
 import odo.structure.column.section.Rectangle;
 
 import java.util.ArrayList;
@@ -17,6 +18,37 @@ public class NeutralAxis {
         this.theta = theta;
         this.section = section;
         linearEquation = setLinearEquation();
+    }
+
+    public Rebar furthestRebar(List<Rebar> rebars) {
+        List<Integer> pair = Quadrant.getPair(theta);
+        double xOfBeginPoint = pair.get(0) * section.b / 2;
+        double yOfBeginPoint = pair.get(1) * section.h / 2;
+        boolean signOfCompression = isNegativeValue(xOfBeginPoint, yOfBeginPoint);
+
+        Rebar furthestRebar = null;
+        double distanceToFurthestRebar = 0;
+
+        for (Rebar rebar : rebars) {
+            boolean signOfSteel = isNegativeValue(rebar.x, rebar.y);
+            if (signOfSteel == signOfCompression) {
+                continue;
+            }
+
+            double distanceToRebar = distanceToPoint(rebar.x, rebar.y);
+            if (furthestRebar == null) {
+                furthestRebar = rebar;
+                distanceToFurthestRebar = distanceToRebar;
+                continue;
+            }
+
+            if (distanceToRebar > distanceToFurthestRebar) {
+                distanceToFurthestRebar = distanceToRebar;
+                furthestRebar = rebar;
+            }
+        }
+
+        return furthestRebar;
     }
 
     public double distanceOfTwoCrossingPoint() {

@@ -32,4 +32,10 @@ class BiAxialTest {
                 .doesNotThrowAnyException();
     }
 
+    @Test
+    void reducedPMCurveTest() {
+        assertThatCode(() -> new BiAxial(column).reducedPMCurve(59.71204))
+                .doesNotThrowAnyException();
+    }
+
 }

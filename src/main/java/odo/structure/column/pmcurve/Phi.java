@@ -4,8 +4,8 @@ import odo.structure.column.material.Steel;
 
 public class Phi {
 
-    private static final double COMPRESSION_DOMINANT_SECTION = 0.65;
-    private static final double TENSION_DOMINANT_SECTION = 0.85;
+    public static final double COMPRESSION_DOMINANT_SECTION = 0.65;
+    public static final double TENSION_DOMINANT_SECTION = 0.85;
 
     public static double calculate(double strain, double tensileStrength) {
         double yieldStrain = tensileStrength / Steel.Es;
