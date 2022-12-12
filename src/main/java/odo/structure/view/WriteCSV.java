@@ -19,7 +19,7 @@ public class WriteCSV {
                     String line = String.format("%d, ", c);
                     line += String.format("%.2f, ", point3D.x / 1e3);
                     line += String.format("%.2f, ", point3D.y / 1e6);
-                    line += String.format("%.2f, ", point3D.z / 1e6);
+                    line += String.format("%.2f", point3D.z / 1e6);
                     bw.write(line);
                     bw.newLine();
                     c++;
