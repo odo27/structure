@@ -5,6 +5,7 @@ import odo.structure.column.material.Concrete;
 import odo.structure.column.material.Steel;
 import odo.structure.column.pmcurve.*;
 import odo.structure.column.reinforcement.Rebar;
+import odo.structure.column.section.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,21 @@ public class BiAxial {
 
     public List<Point3D> PMCurve(double theta) {
         List<Point3D> points3D = new ArrayList<>();
+
+        Rectangle section = column.getSection();
+        Concrete concrete = column.getConcrete();
+        List<Rebar> rebars = column.getRebars();
+
+        double pureCompression = PureStrength.compression(section, concrete, rebars);
+        double pureTension = PureStrength.tension(rebars);
+
+        points3D.add(new Point3D(pureCompression, 0, 0));
+        points3D.add(new Point3D(pureTension, 0, 0));
+
         double furthestCompressionZoneDepth = furthestCompressionZoneDepth(theta);
 
         for (int c = 1; c < furthestCompressionZoneDepth; c++) {
-            NeutralAxis neutralAxis = new NeutralAxis(c, theta, column.getSection());
+            NeutralAxis neutralAxis = new NeutralAxis(c, theta, section);
 
             double Pn = axialStrength(neutralAxis, c, theta);
             Point Mn = flexuralStrength(neutralAxis, c, theta);
@@ -39,15 +51,32 @@ public class BiAxial {
 
     public List<Point3D> reducedPMCurve(double theta) {
         List<Point3D> points3D = new ArrayList<>();
+
+        Rectangle section = column.getSection();
+        Concrete concrete = column.getConcrete();
+        List<Rebar> rebars = column.getRebars();
+
+        double pureCompression = PureStrength.compression(section, concrete, rebars);
+        double reducedPureCompression = 0.8 * Phi.COMPRESSION_DOMINANT_SECTION * pureCompression;
+        double pureTension = PureStrength.tension(rebars);
+        double reducedPureTension = Phi.TENSION_DOMINANT_SECTION * pureTension;
+
+        points3D.add(new Point3D(reducedPureCompression, 0, 0));
+        points3D.add(new Point3D(reducedPureTension, 0, 0));
+
         double furthestCompressionZoneDepth = furthestCompressionZoneDepth(theta);
 
         for (int c = 1; c < furthestCompressionZoneDepth; c++) {
-            NeutralAxis neutralAxis = new NeutralAxis(c, theta, column.getSection());
+            NeutralAxis neutralAxis = new NeutralAxis(c, theta, section);
 
-            Rebar furthestRebar = neutralAxis.furthestRebar(column.getRebars());
+            Rebar furthestRebar = neutralAxis.furthestRebar(rebars);
             double phi = phi(neutralAxis, furthestRebar, c);
 
             double Pn = phi * axialStrength(neutralAxis, c, theta);
+            if (Pn > reducedPureCompression) {
+                continue;
+            }
+
             Point Mn = flexuralStrength(neutralAxis, c, theta);
             double Mnx = phi * Mn.x;
             double Mny = phi * Mn.y;
